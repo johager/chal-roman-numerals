@@ -60,7 +60,7 @@ function toRoman(num) {
 }
 
 function toRoman2(num) {
-    // convert to new-school Roman numerals (9 -> IX)
+    // convert to new-school Roman numerals (9 -> IX and 4 -> IV)
     // this function will work for num < 10,000
     // it cycles through the 1s, 10s, 100s, then 1000s
 
@@ -81,9 +81,14 @@ function toRoman2(num) {
             if (localNum === 9 && chars[i+1].length > 0) {
                 localRoman = chars[i][0] + chars[i+1][0]
             } else {
-                if (localNum > 4 && chars[i].length > 1) {
-                    localRoman = chars[i][1]
-                    localNum -= 5
+                if (localNum > 3 && chars[i].length > 1) {
+                    if (localNum  == 4) {
+                        localNum -= 4
+                        localRoman = chars[i][0] + chars[i][1]
+                    } else {
+                        localRoman = chars[i][1]
+                        localNum -= 5    
+                    }
                 }
                 if (localNum > 0) {
                     localRoman += chars[i][0].repeat(localNum)
@@ -117,17 +122,21 @@ function test(func, inp, exp) {
 // test(toRoman,500,'D')
 // test(toRoman,1000,'M')
 
+// test(toRoman,4,'IIII')
 test(toRoman,267,'CCLXVII')
 test(toRoman,99,'LXXXXVIIII')
 // test(toRoman,1000,'M')
-test(toRoman,9000,'MMMMMMMMM')
-test(toRoman,9999,'MMMMMMMMMDCCCCLXXXXVIIII')
+// test(toRoman,9000,'MMMMMMMMM')
+// test(toRoman,9999,'MMMMMMMMMDCCCCLXXXXVIIII')
 
-// test(toRoman2,9,'IX')
+test(toRoman2,4,'IV')
+test(toRoman2,9,'IX')
 test(toRoman2,267,'CCLXVII')
 test(toRoman2,99,'XCIX')
-// test(toRoman2,1000,'M')
-test(toRoman2,9000,'MMMMMMMMM')
-test(toRoman2,9999,'MMMMMMMMMCMXCIX')
+test(toRoman2,494,'CDXCIV')
+test(toRoman2,900,'CM')
+test(toRoman2,1000,'M')
+// test(toRoman2,9000,'MMMMMMMMM')
+// test(toRoman2,9999,'MMMMMMMMMCMXCIX')
 
 // console.log(`repeat(3): '${'#'.repeat(3)}'`)
