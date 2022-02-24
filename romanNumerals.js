@@ -26,6 +26,7 @@ toRoman(99)  // 'LXXXXVIIII'
 */
 
 function toRoman(num) {
+    // convert to old-school Roman numerals (9 -> VIIII)
     // this function will work for num < 10,000
     // it cycles through the 1s, 10s, 100s, then 1000s
 
@@ -58,28 +59,75 @@ function toRoman(num) {
     return roman
 }
 
-function testToRoman(inp, exp) {
-    const res = toRoman(inp)
+function toRoman2(num) {
+    // convert to new-school Roman numerals (9 -> IX)
+    // this function will work for num < 10,000
+    // it cycles through the 1s, 10s, 100s, then 1000s
+
+    let roman = ''
+    const chars = [
+        ['I','V'],  // 1, 5
+        ['X','L'],  // 10, 50
+        ['C','D'],  // 100, 500
+        ['M'],  // 1000
+        []  // 10000
+    ]
+    
+    let i = 0  // index of the chars array
+    while (num > 0) {
+        let localNum = num % 10
+        if (localNum > 0) {
+            let localRoman = ''
+            if (localNum === 9 && chars[i+1].length > 0) {
+                localRoman = chars[i][0] + chars[i+1][0]
+            } else {
+                if (localNum > 4 && chars[i].length > 1) {
+                    localRoman = chars[i][1]
+                    localNum -= 5
+                }
+                if (localNum > 0) {
+                    localRoman += chars[i][0].repeat(localNum)
+                }
+            }
+            roman = localRoman + roman
+        }
+        num = Math.floor(num / 10)
+        i++
+    }
+
+    return roman
+}
+
+function test(func, inp, exp) {
+    const res = func(inp)
     let passed = false
     if (res === exp) {
         passed = 'true '
     }
-    console.log("passed:", passed, ` inp: ${inp}  res: '${res}'  exp: '${exp}'`)
+    console.log("passed:", passed, ` func: ${func.name}  inp: ${inp}  res: '${res}'  exp: '${exp}'`)
 }
 
-// testToRoman(1,'I')
-// testToRoman(5,'V')
-// testToRoman(10,'X')
-// testToRoman(20,'XX')
-// testToRoman(50,'L')
-// testToRoman(100,'C')
-// testToRoman(200,'CC')
-// testToRoman(500,'D')
-// testToRoman(1000,'M')
+// test(toRoman,1,'I')
+// test(toRoman,5,'V')
+// test(toRoman,10,'X')
+// test(toRoman,20,'XX')
+// test(toRoman,50,'L')
+// test(toRoman,100,'C')
+// test(toRoman,200,'CC')
+// test(toRoman,500,'D')
+// test(toRoman,1000,'M')
 
-testToRoman(267,'CCLXVII')
-testToRoman(99,'LXXXXVIIII')
-testToRoman(1000,'M')
-testToRoman(9000,'MMMMMMMMM')
+test(toRoman,267,'CCLXVII')
+test(toRoman,99,'LXXXXVIIII')
+// test(toRoman,1000,'M')
+test(toRoman,9000,'MMMMMMMMM')
+test(toRoman,9999,'MMMMMMMMMDCCCCLXXXXVIIII')
+
+// test(toRoman2,9,'IX')
+test(toRoman2,267,'CCLXVII')
+test(toRoman2,99,'XCIX')
+// test(toRoman2,1000,'M')
+test(toRoman2,9000,'MMMMMMMMM')
+test(toRoman2,9999,'MMMMMMMMMCMXCIX')
 
 // console.log(`repeat(3): '${'#'.repeat(3)}'`)
