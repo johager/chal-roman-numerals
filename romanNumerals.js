@@ -27,6 +27,8 @@ toRoman(99)  // 'LXXXXVIIII'
 
 function toRoman(num) {
     // this function will work for num < 10,000
+    // it cycles through the 1s, 10s, 100s, then 1000s
+
     let roman = ''
     const chars = [
         ['I','V'],  // 1, 5
@@ -38,14 +40,18 @@ function toRoman(num) {
     let i = 0  // index of the chars array
     while (num > 0) {
         let localNum = num % 10
-        let localRoman = ''
-        if(localNum > 4 && chars[i].length > 1) {
-            localRoman = chars[i][1]
-            localNum -= 5
+        if (localNum > 0) {
+            let localRoman = ''
+            if (localNum > 4 && chars[i].length > 1) {
+                localRoman = chars[i][1]
+                localNum -= 5
+            }
+            if (localNum > 0) {
+                localRoman += chars[i][0].repeat(localNum)
+            }
+            roman = localRoman + roman
         }
-        localRoman += chars[i][0].repeat(localNum)
         num = Math.floor(num / 10)
-        roman = localRoman + roman
         i++
     }
 
